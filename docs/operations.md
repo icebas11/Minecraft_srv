@@ -22,7 +22,73 @@ Commandes utiles :
 | `say <message>` | Message à tous les joueurs |
 | `neoforge tps` | Performances (TPS par dimension) |
 
+> **Admins** : la liste des ops est **exactement** celle de `OPS` dans le `.env` (`EXISTING_OPS_FILE=SYNCHRONIZE`). Un `op` donné en console ne dure que jusqu'au prochain redémarrage. Pour être le seul admin, mets uniquement ton pseudo dans `OPS`.
+>
 > Les variables `WHITELIST`/`OPS` du `.env` sont appliquées à chaque démarrage. Pour qu'un ajout fait en console soit permanent et reproductible, reporte-le aussi dans le `.env`.
+
+## Permissions (LuckPerms + FTB Essentials)
+
+**Principe :** toi seul es op (`OPS` du `.env`) et tu as donc tous les droits. Les autres joueurs reçoivent des commandes précises via des **groupes LuckPerms**.
+Les permissions sont stockées dans la base LuckPerms (`data/config/luckperms/`), pas dans Git : les snapshots ZFS les sauvegardent.
+
+### Commandes FTB Essentials
+
+| Pour tout le monde (par défaut) | Pour les admins (op niveau 2 par défaut) |
+|---|---|
+| `/sethome [nom]`, `/home [nom]`, `/delhome`, `/listhomes` | `/fly`, `/god`, `/heal`, `/feed` |
+| `/tpa <joueur>`, `/tpahere`, `/tpaccept`, `/tpdeny` | `/invsee`, `/enderchest <joueur>` |
+| `/back`, `/spawn`, `/rtp` (téléportation aléatoire) | `/setwarp`, `/delwarp`, `/mute`, `/nick` |
+| `/warp <nom>`, `/listwarps`, `/near`, `/leaderboard` | `/kit` (créer et donner des kits), `/tpoffline`, `/speed` |
+
+Réglages (commandes activées, cooldowns, nombre de homes, rayon du `/rtp`…) : fichier `ftbessentials-server.snbt` dans `data/world/serverconfig/`, puis redémarrage.
+
+### Mise en place type
+
+Dans la console (`docker exec -it minecraft rcon-cli`) :
+
+```
+# Groupe "moderateur" : quelques commandes d'admin choisies
+lp creategroup moderateur
+lp group moderateur permission set minecraft.command.tp true
+lp group moderateur permission set minecraft.command.kick true
+
+# Groupe "vip" : peut voler et se soigner
+lp creategroup vip
+lp group vip permission set ftbessentials.fly true
+
+# Le modérateur hérite des droits vip
+lp group moderateur parent add vip
+
+# Affecter / retirer un joueur
+lp user PseudoAmi parent add moderateur
+lp user PseudoAmi parent remove moderateur
+
+# Retirer une commande à tout le monde (groupe "default" = tous les joueurs)
+lp group default permission set ftbessentials.rtp false
+
+# Voir ce qu'un joueur a
+lp user PseudoAmi permission info
+```
+
+### Trouver le nom exact d'une permission
+
+Les noms ci-dessus (`minecraft.command.*`, `ftbessentials.*`) sont des exemples : vérifie-les sur ton serveur.
+
+1. `lp verbose on` en console.
+2. Demande au joueur de taper la commande (ou tape-la avec un compte non op).
+3. La console affiche chaque permission testée, avec son nom exact et le résultat (`true`, `false`, `undefined`).
+4. `lp verbose off`.
+
+### Éditeur web
+
+`lp editor` génère un lien vers une interface web : groupes, héritage, permissions et joueurs se gèrent à la souris. Clique sur *Save*, puis colle dans la console la commande `lp applyedits …` affichée.
+
+### Sauvegarder / restaurer les permissions en texte
+
+```
+lp export permissions        # crée data/config/luckperms/permissions.json.gz
+lp import permissions        # restaure depuis ce fichier
+```
 
 ## Appliquer une mise à jour du pack
 
