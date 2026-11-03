@@ -34,6 +34,16 @@ Au premier lancement :
 
 La carte du monde est consultable dans un navigateur à l'adresse fournie par l'admin (par exemple `https://carte.monserveur.duckdns.org`).
 
+## Commandes utiles en jeu
+
+| Commande | Effet |
+|---|---|
+| `/sethome` puis `/home` | Enregistrer ta maison, puis t'y téléporter |
+| `/tpa <pseudo>` | Demander à te téléporter vers un joueur (il répond `/tpaccept` ou `/tpdeny`) |
+| `/back` | Revenir à ta position précédente (ou à l'endroit de ta mort) |
+| `/spawn` | Retourner au point d'apparition |
+| `/warp <nom>`, `/listwarps` | Lieux communs créés par l'admin |
+
 ## Mises à jour
 
 **Tu n'as rien à faire** : à chaque lancement, l'instance vérifie le pack et installe, met à jour ou supprime les mods toute seule.

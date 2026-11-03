@@ -49,5 +49,9 @@ Le serveur **et** les joueurs se synchronisent automatiquement sur ce pack.
 | Mod | Côté | Rôle |
 |---|---|---|
 | BlueMap 5.7 | serveur | Carte 3D du monde : `http://<ip-truenas>:8100` en LAN, `https://carte.<domaine>.duckdns.org` via NPMplus |
+| LuckPerms 5.4.140 | serveur | Permissions fines par groupe/joueur ([operations.md](docs/operations.md#permissions-luckperms--ftb-essentials)) |
+| FTB Essentials 2101.1.10 | les deux | `/home`, `/tpa`, `/back`, `/spawn`, `/warp`, `/rtp`… |
+| FTB Library 2101.1.39 | les deux | Dépendance de FTB Essentials |
+| Architectury API 13.0.11 | les deux | Dépendance de FTB Library |
 
 Ajoute tes mods en suivant [docs/mods.md](docs/mods.md).

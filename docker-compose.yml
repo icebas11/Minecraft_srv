@@ -48,5 +48,8 @@ services:
       ENFORCE_WHITELIST: "true"
       WHITELIST: ${WHITELIST:-}
       OPS: ${OPS:-}
+      # ops.json est réécrit à chaque démarrage pour correspondre exactement à OPS :
+      # un /op donné en jeu disparaît au redémarrage
+      EXISTING_OPS_FILE: "SYNCHRONIZE"
     volumes:
       - ${MC_DATA_DIR:?MC_DATA_DIR doit être défini dans .env}:/data
