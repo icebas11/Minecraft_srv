@@ -1,0 +1,66 @@
+name: Pack
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+
+      - name: Installer packwiz
+        run: go install github.com/packwiz/packwiz@latest
+
+      - name: Versions serveur / pack cohérentes
+        run: bash scripts/check-versions.sh
+
+      - name: Index packwiz à jour
+        working-directory: pack
+        run: |
+          packwiz refresh
+          if ! git diff --exit-code -- .; then
+            echo "::error::L'index packwiz n'est pas à jour : lance 'packwiz refresh' dans pack/ et commite."
+            exit 1
+          fi
+
+  release:
+    needs: check
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-go@v5
+        with:
+          go-version: stable
+
+      - name: Installer packwiz
+        run: go install github.com/packwiz/packwiz@latest
+
+      - name: Construire l'instance Prism
+        run: bash scripts/build-prism-instance.sh "https://raw.githubusercontent.com/${{ github.repository }}/main/pack/pack.toml"
+
+      - name: Exporter le .mrpack
+        working-directory: pack
+        run: |
+          mkdir -p ../dist
+          packwiz modrinth export -o "../dist/pack-${{ github.ref_name }}.mrpack"
+
+      - name: Publier la release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/*-prism.zip
+            dist/*.mrpack
+          generate_release_notes: true

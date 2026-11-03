@@ -1,0 +1,3 @@
+# Fichiers présents dans pack/ mais à ne pas distribuer
+README.md
+*.mrpack

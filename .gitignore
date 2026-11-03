@@ -1,0 +1,8 @@
+# Secrets et réglages locaux de la stack
+.env
+
+# Artefacts générés (instance Prism, .mrpack)
+dist/
+
+# Données du serveur si tu testes la stack en local
+data/

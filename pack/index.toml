@@ -1,0 +1,10 @@
+hash-format = "sha256"
+
+[[files]]
+file = "config/bluemap/core.conf"
+hash = "8654eb04f968ee75d770c1b1cd9f6159cedee16e967ceeca970c1adfe7023175"
+
+[[files]]
+file = "mods/bluemap.pw.toml"
+hash = "f33a4720ef4f315b6d1f778039e9f7bdb8f5ef1b58a57d565c30fd1d8adee207"
+metafile = true

@@ -1,0 +1,7 @@
+# Les hashes packwiz sont calculés sur les octets des fichiers :
+# on force des fins de ligne LF partout pour qu'ils restent valides.
+* text=auto eol=lf
+*.jar binary
+*.png binary
+*.zip binary
+*.mrpack binary
